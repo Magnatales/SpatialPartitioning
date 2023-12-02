@@ -1,4 +1,4 @@
-# Spatial Partitioning using MonoGame!
+# Spatial Partitioning
 
 A small project that uses quadtrees to make a performant collision-checking game
 
