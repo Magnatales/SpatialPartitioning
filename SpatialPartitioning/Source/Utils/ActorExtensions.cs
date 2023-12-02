@@ -1,8 +1,8 @@
-﻿using Graphics.Entities;
+﻿using Graphics.World;
 
 namespace Graphics.Utils;
 
-public static class CircleExtensions
+public static class ActorExtensions
 {
     public static bool IsColliding(this Actor actor, Actor other)
     {

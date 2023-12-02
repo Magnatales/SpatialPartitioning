@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Graphics;
-using Graphics.Entities;
+using Graphics.World;
 using Graphics.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;

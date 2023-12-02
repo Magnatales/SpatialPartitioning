@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Graphics.Entities;
+namespace Graphics.World;
 
 public class Actor
 {
