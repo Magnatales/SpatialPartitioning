@@ -4,19 +4,26 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Graphics.Entities;
 
-public class Circle
+public class Actor
 {
     public Vector2 Position;
     public readonly float Radius;
     public Color Color;
     private readonly Random _random;
+    private RectangleF _boundaries;
 
-    public Circle(Vector2 position, float radius, Color color)
+    public Actor(Vector2 position, float radius, Color color)
     {
         _random = new Random();
         Position = position;
         Radius = radius;
         Color = color;
+        _boundaries = new RectangleF(
+            (Position.X - Radius),
+            (Position.Y - Radius),
+            (2 * Radius),
+            (2 * Radius)
+        );
     }
 
     public void Update()
@@ -37,5 +44,12 @@ public class Circle
     public void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.DrawCircleFilled(Position, Radius, Color);
+    }
+    
+    public RectangleF GetBoundaries()
+    {
+        _boundaries.X = Position.X - Radius;
+        _boundaries.Y = Position.Y - Radius;
+        return _boundaries;
     }
 }

@@ -54,7 +54,7 @@ public class SpatialPartitioning : Game
         _spriteBatch.Begin();
         _world.Draw(_spriteBatch);
         _fpsDrawer.Draw(_spriteBatch, GameEnvironment.DefaultFont, new Vector2(20, 10));
-        var centerOfScreen = new Vector2(GraphicsDevice.Viewport.Width / 2f, 70); // Use Height for Y-coordinate
+        var centerOfScreen = new Vector2(GraphicsDevice.Viewport.Width / 2f, 70);
         var title = "Spatial Partitioning - Quadtree";
         var size = GameEnvironment.DefaultBigFont.MeasureString(title);
         var position = centerOfScreen - size / 2;

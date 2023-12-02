@@ -4,12 +4,12 @@ namespace Graphics.Utils;
 
 public static class CircleExtensions
 {
-    public static bool IsColliding(this Circle circle, Circle other)
+    public static bool IsColliding(this Actor actor, Actor other)
     {
-        var dx = other.Position.X - circle.Position.X;
-        var dy = other.Position.Y - circle.Position.Y;
+        var dx = other.Position.X - actor.Position.X;
+        var dy = other.Position.Y - actor.Position.Y;
         var distanceSquared = (dx * dx) + (dy * dy);
-        var radiiSumSquared = (circle.Radius + other.Radius) * (circle.Radius + other.Radius);
+        var radiiSumSquared = (actor.Radius + other.Radius) * (actor.Radius + other.Radius);
         return distanceSquared < radiiSumSquared;
     }
 }

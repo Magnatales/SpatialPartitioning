@@ -14,20 +14,20 @@ public class World : IDisposable
     private Vector2 _offset;
     private RectangleF _quadRectangle;
     private readonly Quadtree _quadtree;
-    private readonly List<Circle> _circlesInRange = new();
+    private readonly List<Actor> _circlesInRange = new();
 
     public World(Vector2 size, int entitiesAmount)
     {
         _size = size;
         var random = new Random();
-        var circles = new List<Circle>();
+        var circles = new List<Actor>();
         _quadtree = new Quadtree(_quadRectangle, 3);
         for (var i = 0; i < entitiesAmount; i++)
         {
             var pos = new Vector2(random.Next((int)_offset.X, (int)(_offset.X + _size.X)), random.Next((int)_offset.Y, (int)(_offset.Y + _size.Y)));
             var radius = 6;
             var color = Color.YellowGreen;
-            var entity = new Circle(pos, radius, color);
+            var entity = new Actor(pos, radius, color);
             circles.Add(entity);
         }
         _quadtree.AddActors(circles);
@@ -36,7 +36,7 @@ public class World : IDisposable
         GameEnvironment.Window.ClientSizeChanged += UpdateOffset;
     }
     
-    private void OnQuadtreeUpdated(List<Circle> entities)
+    private void OnQuadtreeUpdated(List<Actor> entities)
     {
         foreach (var entity in entities)
         {

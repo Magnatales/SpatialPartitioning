@@ -5,31 +5,45 @@ using Graphics.Entities;
 using Graphics.Utils;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Vector2 = System.Numerics.Vector2;
 
 namespace Helpers.quadtree;
 
 public class Quadtree : IDisposable
 {
-    public int Capacity { get; private set; }
-    public event Action<List<Circle>> OnQuadTreeUpdate; 
+    public event Action<List<Actor>> OnQuadTreeUpdate; 
     
+    private readonly int _capacity;
     private RectangleF _boundaries;
-    private bool _divided;
-    private readonly List<Circle> _totalActors = new();
-    private readonly List<Circle> _actorsInQuadtree = new();
-    private readonly List<Circle> _actorsWithinBoundaries = new();
-    private List<Circle> _actorsInViewPort = new();
     private RectangleF _currentViewPort;
+    private bool _divided;
+    
+    private readonly List<Actor> _totalActors = new();
+    private readonly List<Actor> _actorsInQuadtree = new();
+    private readonly List<Actor> _actorsWithinBoundaries = new();
+    private List<Actor> _actorsInViewPort = new();
+    
     private Quadtree _northWest;
     private Quadtree _northEast;
     private Quadtree _southWest;
     private Quadtree _southEast;
 
+    private readonly Vector2 _topLeft;
+    private readonly Vector2 _topRight;
+    private readonly Vector2 _bottomLeft;
+    private readonly Vector2 _bottomRight;
+
     public Quadtree(RectangleF boundaries, int capacity)
     {
         _boundaries = boundaries;
-        Capacity = capacity;
+        _topLeft.X = _boundaries.X;
+        _topLeft.Y = _boundaries.Y;
+        _topRight.X = _boundaries.X + _boundaries.Width;
+        _topRight.Y = _boundaries.Y;
+        _bottomLeft.X = _boundaries.X;
+        _bottomLeft.Y = _boundaries.Y + _boundaries.Height;
+        _bottomRight.X = _boundaries.X + _boundaries.Width;
+        _bottomRight.Y = _boundaries.Y + _boundaries.Height;
+        _capacity = capacity;
         _divided = false;
     }
 
@@ -43,19 +57,19 @@ public class Quadtree : IDisposable
         _divided = false;
     }
 
-    public void AddActors(List<Circle> actors)
+    public void AddActors(List<Actor> actors)
     {
         _totalActors.AddRange(actors);
     }
 
-    public bool InsertInQuadtree(Circle actor)
+    public bool InsertInQuadtree(Actor actor)
     {
         if (!_boundaries.Contains(actor.Position))
             return false;
 
         if (!_divided)
         {
-            if (_actorsInQuadtree.Count < Capacity)
+            if (_actorsInQuadtree.Count < _capacity)
             {
                 _actorsInQuadtree.Add(actor);
                 return true;
@@ -74,6 +88,8 @@ public class Quadtree : IDisposable
     {
         Clear();
         _boundaries = boundaries;
+        
+        
         foreach (var actor in _totalActors)
         {
             InsertInQuadtree(actor);
@@ -85,11 +101,11 @@ public class Quadtree : IDisposable
         OnQuadTreeUpdate?.Invoke(_actorsInViewPort);
     }
 
-    public bool RemoveActor(Circle actor)
+    public bool RemoveActor(Actor actor)
     {
         if (_actorsInQuadtree.Remove(actor))
         {
-            if (_actorsInQuadtree.Count <= Capacity)
+            if (_actorsInQuadtree.Count <= _capacity)
             {
                 _divided = false;
             }
@@ -123,7 +139,7 @@ public class Quadtree : IDisposable
         return false;
     }
     
-    public void GetActorsWithinActorRange(Circle actor, List<Circle> result)
+    public void GetActorsWithinActorRange(Actor actor, List<Actor> result)
     {
         var position = actor.Position;
         if (_boundaries.Contains(position))
@@ -144,7 +160,7 @@ public class Quadtree : IDisposable
     }
     
     
-    public List<Circle> GetActorsWithinBoundaries(RectangleF boundaries)
+    public List<Actor> GetActorsWithinBoundaries(RectangleF boundaries)
     {
         _actorsWithinBoundaries.Clear();
         if (!_boundaries.Intersects(boundaries))
@@ -179,16 +195,16 @@ public class Quadtree : IDisposable
         var h = _boundaries.Height / 2;
 
         var nw = new RectangleF(x, y, w, h);
-        _northWest = new Quadtree(nw, Capacity);
+        _northWest = new Quadtree(nw, _capacity);
 
         var ne = new RectangleF(x + w, y, w, h);
-        _northEast = new Quadtree(ne, Capacity);
+        _northEast = new Quadtree(ne, _capacity);
 
         var sw = new RectangleF(x, y + h, w, h);
-        _southWest = new Quadtree(sw, Capacity);
+        _southWest = new Quadtree(sw, _capacity);
 
         var se = new RectangleF(x + w, y + h, w, h);
-        _southEast = new Quadtree(se, Capacity);
+        _southEast = new Quadtree(se, _capacity);
 
         _divided = true;
     }
@@ -244,17 +260,16 @@ public class Quadtree : IDisposable
     public void DrawDebug(SpriteBatch spriteBatch)
     {
         var thickness = 3;
-        spriteBatch.DrawLine(new Vector2(_boundaries.X, _boundaries.Y), new Vector2(_boundaries.X + _boundaries.Width, _boundaries.Y), Color.OrangeRed, thickness);
-        spriteBatch.DrawLine(new Vector2(_boundaries.X, _boundaries.Y), new Vector2(_boundaries.X, _boundaries.Y + _boundaries.Height), Color.OrangeRed, thickness);
-        spriteBatch.DrawLine(new Vector2(_boundaries.X, _boundaries.Y + _boundaries.Height), new Vector2(_boundaries.X + _boundaries.Width, _boundaries.Y + _boundaries.Height), Color.OrangeRed, thickness);
-        spriteBatch.DrawLine(new Vector2(_boundaries.X + _boundaries.Width, _boundaries.Y), new Vector2(_boundaries.X + _boundaries.Width, _boundaries.Y + _boundaries.Height), Color.OrangeRed, thickness);
-        if (_divided)
-        {
-            _northWest.DrawDebug(spriteBatch);
-            _northEast.DrawDebug(spriteBatch);
-            _southWest.DrawDebug(spriteBatch);
-            _southEast.DrawDebug(spriteBatch);
-        }
+        spriteBatch.DrawLine(_topLeft, _topRight, Color.OrangeRed, thickness);
+        spriteBatch.DrawLine(_topLeft, _bottomLeft, Color.OrangeRed, thickness);
+        spriteBatch.DrawLine(_bottomLeft, _bottomRight, Color.OrangeRed, thickness);
+        spriteBatch.DrawLine(_topRight, _bottomRight, Color.OrangeRed, thickness);
+
+        if (!_divided) return;
+        _northWest.DrawDebug(spriteBatch);
+        _northEast.DrawDebug(spriteBatch);
+        _southWest.DrawDebug(spriteBatch);
+        _southEast.DrawDebug(spriteBatch);
     }
     
     public void Dispose()

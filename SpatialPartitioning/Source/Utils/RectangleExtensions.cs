@@ -28,17 +28,11 @@ public static class RectangleExtensions
                point.Y <= rectangle.Bottom;
     }
     
-    public static bool Contains(this RectangleF rectangleF, Circle entity)
+    public static bool Contains(this RectangleF rectangleF, Actor entity)
     {
-        RectangleF circleBoundingBox = new RectangleF(
-            (entity.Position.X - entity.Radius),
-            (entity.Position.Y - entity.Radius),
-            (2 * entity.Radius),
-            (2 * entity.Radius)
-        );
-        
-        var topLeftInside = rectangleF.Contains(circleBoundingBox.TopLeft());
-        var bottomRightInside = rectangleF.Contains(circleBoundingBox.BottomRight());
+        var boundaries = entity.GetBoundaries();
+        var topLeftInside = rectangleF.Contains(boundaries.TopLeft());
+        var bottomRightInside = rectangleF.Contains(boundaries.BottomRight());
         
         return topLeftInside && bottomRightInside;
     }
