@@ -14,7 +14,7 @@ public class World : IDisposable
     private Vector2 _offset;
     private RectangleF _quadRectangle;
     private readonly Quadtree _quadtree;
-    private readonly List<Actor> _circlesInRange = new();
+    private readonly List<Actor> _actorsInRange = new();
 
     public World(Vector2 size, int entitiesAmount)
     {
@@ -36,24 +36,24 @@ public class World : IDisposable
         GameEnvironment.Window.ClientSizeChanged += UpdateOffset;
     }
     
-    private void OnQuadtreeUpdated(List<Actor> entities)
+    private void OnQuadtreeUpdated(List<Actor> actorsInQuadRectangle)
     {
-        foreach (var entity in entities)
+        foreach (var actor in actorsInQuadRectangle)
         {
-            entity.Update();
+            actor.Update();
             var collided = false;
-            _circlesInRange.Clear();
-            _quadtree.GetActorsWithinActorRange(entity, _circlesInRange);
+            _actorsInRange.Clear();
+            _quadtree.GetActorsWithinActorRange(actor, _actorsInRange);
 
-            foreach (var circle in _circlesInRange)
+            foreach (var circle in _actorsInRange)
             {
-                if(circle == entity) 
+                if(circle == actor) 
                     continue;
                 
-                if (entity.IsColliding(circle))
+                if (actor.IsColliding(circle))
                     collided = true;
             }
-            entity.Color = collided ? Color.Red : Color.YellowGreen;
+            actor.Color = collided ? Color.Red : Color.YellowGreen;
         }
     }
 
