@@ -7,7 +7,7 @@ public static class SpriteBatchExtensions
 {
     public static void DrawStringWithShadow(this SpriteBatch spriteBatch, SpriteFont font, string text, Vector2 position, Color color, Color shadow = default)
     {
-        spriteBatch.DrawString(font, text, position + new Vector2(1.5f, 1.5f), shadow);
+        spriteBatch.DrawString(font, text, position + new Vector2(2f, 2f), shadow);
         spriteBatch.DrawString(font, text, position, color);
     }
     

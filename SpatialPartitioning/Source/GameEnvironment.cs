@@ -8,6 +8,9 @@ public static class GameEnvironment
 {
     public static GraphicsDeviceManager Graphics { get; set; }
     public static ContentManager Content { get; set; }
+    
     public static SpriteFont DefaultFont;
+    
+    public static SpriteFont DefaultBigFont;
     public static GameWindow Window;
 }

@@ -1,9 +1,10 @@
 ﻿using System;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Graphics.Entities;
 
-public struct Circle
+public class Circle
 {
     public Vector2 Position;
     public readonly float Radius;
@@ -18,11 +19,10 @@ public struct Circle
         Color = color;
     }
 
-    public void Update(GameTime gameTime)
+    public void Update()
     {
-        const int maxSpeed = 100;
-        var frameTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        var speed = maxSpeed * frameTime;
+        const float maxSpeed = 300f;
+        var speed = maxSpeed * Time.Delta;
         var angle = (float)_random.NextDouble() * 2 * MathF.PI;
         var xOffset = speed * MathF.Cos(angle);
         var yOffset = speed * MathF.Sin(angle);
@@ -32,5 +32,10 @@ public struct Circle
             Position.Y + yOffset
         );
         Position = newPosition;
+    }
+    
+    public void Draw(SpriteBatch spriteBatch)
+    {
+        spriteBatch.DrawCircleFilled(Position, Radius, Color);
     }
 }

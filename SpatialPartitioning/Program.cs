@@ -1,3 +1,4 @@
-﻿
-using var game = new spatial_partitioning.SpatialPartitioning();
+﻿using Project;
+
+using var game = new SpatialPartitioning();
 game.Run();

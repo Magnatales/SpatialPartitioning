@@ -13,7 +13,7 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Textures/circle-filled.png
+#begin textures/circle-filled.png
 /importer:TextureImporter
 /processor:TextureProcessor
 /processorParam:ColorKeyColor=255,0,255,255
@@ -23,13 +23,21 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Textures/circle-filled.png
+/build:textures/circle-filled.png
 
-#begin Textures/verdana.png
+#begin textures/verdana-big.png
 /importer:TextureImporter
 /processor:FontTextureProcessor
 /processorParam:FirstCharacter= 
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Color
-/build:Textures/verdana.png
+/build:textures/verdana-big.png
+
+#begin textures/verdana.png
+/importer:TextureImporter
+/processor:FontTextureProcessor
+/processorParam:FirstCharacter= 
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Color
+/build:textures/verdana.png
 
